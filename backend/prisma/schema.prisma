@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TYPES {
+  MAN
+  WOMAN
+  ANYONE
+}
+
+// enum INTERESTS {
+//   IA
+//   FRONTEND
+//   BACKEND
+//   REDES
+//   MOBILE
+//   CYBERSECURITY
+//   CSHARP
+//   JAVASCRIPT
+//   JAVA
+//   DEVOPS
+// }
+
+model User {
+  id               String            @id @default(uuid())
+  name             String
+  password_hash    String
+  email            String            @unique
+  created_at       DateTime          @default(now())
+  semester         Int
+  tel              String
+  image            Bytes?            @db.ByteA
+  republicInterest RepublicInterest?
+  ride             Ride?
+  course           Course            @relation(fields: [courseId], references: [id])
+  courseId         String
+  interests        UserInterest[]
+  followedBy       Follows[]         @relation("following")
+  following        Follows[]         @relation("followedBy")
+
+  @@map("users")
+}
+
+model Follows {
+  followedById String
+  followedBy   User   @relation("followedBy", fields: [followedById], references: [id])
+  followingId  String
+  following    User   @relation("following", fields: [followingId], references: [id])
+
+  @@id([followingId, followedById])
+  @@map("follows")
+}
+
+model RepublicInterest {
+  id             String @id @default(uuid())
+  resident_limit Int
+  preferences    TYPES
+  user           User   @relation(fields: [user_id], references: [id])
+  user_id        String @unique
+
+  @@map("republic_interests")
+}
+
+model Ride {
+  id              String @id @default(uuid())
+  origin          String
+  destination     String
+  passenger_limit Int
+  user            User   @relation(fields: [user_id], references: [id])
+  user_id         String @unique
+
+  @@map("rides")
+}
+
+model Course {
+  id       String @id @default(uuid())
+  name     String
+  duration Int
+
+  user User[]
+
+  @@map("courses")
+}
+
+model Interest {
+  id   String @id @default(uuid())
+  name String
+
+  user UserInterest[]
+
+  @@map("interests")
+}
+
+model UserInterest {
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  interestId String
+  interest   Interest @relation(fields: [interestId], references: [id])
+
+  @@id([userId, interestId])
+  @@map("user_interests")
+}
+
+model City {
+  id        String @id @default(uuid())
+  name      String
+  latitude  Float
+  longitude Float
+
+  @@map("cities")
+}
