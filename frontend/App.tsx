@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { CityContextProvider } from 'src/context/CitiesContext';
 import { RideContextProvider } from 'src/context/RideContext';
 import { RepublicInterestContext, RepublicInterestContextProvider } from 'src/context/RepublicInterestContext';
+import { FollowerContextProvider } from 'src/context/FollowersContext';
 
 export default function App() {
 
@@ -29,7 +30,9 @@ export default function App() {
         <CityContextProvider>
           <RideContextProvider>
             <RepublicInterestContextProvider>
-              {fontsLoaded ? <Routes /> : <Loading />}
+              <FollowerContextProvider>
+                {fontsLoaded ? <Routes /> : <Loading />}
+              </FollowerContextProvider>
             </RepublicInterestContextProvider>
           </RideContextProvider>
         </CityContextProvider>

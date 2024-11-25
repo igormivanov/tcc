@@ -3,13 +3,14 @@ import { Input } from "@components/Input";
 import { CourseDTO } from "@dtos/CourseDTO"
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "@hooks/useAuth";
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Center, CheckIcon, FormControl, Heading, Select, Text, View, VStack, WarningOutlineIcon } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form"
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthNavigatorRoutesProps } from "src/routes/auth.routes";
 import { HomeNavigatorRoutesProps } from "src/routes/home.routes";
+
 import { api } from "src/service/api";
 import * as yup from 'yup';
 
@@ -48,7 +49,7 @@ export function SignUp2({ route }: any){
 
 	const navigation = useNavigation<AuthNavigatorRoutesProps>()
 	const [isLoading, setIsLoading] = useState(false)
-
+	const [courses, setCourses] = useState<CourseDTO[]>([])
 	const { name, email, password } = route.params
 	const {signIn} = useAuth()
 
@@ -56,15 +57,40 @@ export function SignUp2({ route }: any){
 		navigation.goBack()
 	}
 
+	useEffect(() => {
+		const getCourses = async () => {
+			try {
+        const {data} = await api.get('/courses')
+        setCourses(data.courses)
+      } catch (err) {
+        throw err
+      }
+		}
+
+		getCourses()
+	}, [])
+
 	async function handleSignUp({courseId, semester, tel}: FormDataProps) {
 		try {
 			setIsLoading(true)
 			await api.post('/users', {name, email, semester, password, courseId, tel})
 			await signIn(email, password)
+			// navigation.navigate('homeScreen')
+			// navigation.dispatch(CommonActions.reset({
+			// 	index: 1,
+			// 	routes: [
+			// 		{ name: 'homeScreen' },
+			// 	],
+			// }));
+			// navigation.reset({
+			// 	index: 0,
+			// 	routes: [{ name: 'homeScreen' }], // Referenciando a rota da aba Home
+			// });
+
 		} catch (err) {
 			setIsLoading(false)
 		}
-		// navigation.navigate("signIn")
+		navigation.navigate("signIn")
 	}
 
   const {
@@ -125,7 +151,7 @@ export function SignUp2({ route }: any){
 										}}
 										mt="1"
 									>
-										{coursesFromBackend.map((course) => (
+										{courses.map((course) => (
 											<Select.Item key={course.id} label={course.name} value={course.id} />
 										))}
 									</Select>

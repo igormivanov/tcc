@@ -72,7 +72,7 @@ export function Search(){
           <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
             {handleUsersFilter().map(user => {
               return (
-                <TouchableOpacity onPress={() => navigation.navigate("UserSearchProfile", {userId: user.id})}>
+                <TouchableOpacity key={user.id} onPress={() => navigation.navigate("UserSearchProfile", {userId: user.id})}>
                   <HStack mt={2} mb={3} justifyContent="space-between" alignItems="center">
                     <HStack display="flex" >
                       <UserPhoto

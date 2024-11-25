@@ -45,7 +45,7 @@ export function InteresseRepublica() {
                   start: [0,1],
                   end: [3,0]
                 }
-              }}  borderRadius={8} p={2}>
+              }}  borderRadius={8} p={2} key={rep.id}>
                 <Text fontSize="lg">{rep.user.name}</Text>
                 <Text>
                   { rep.preferences.toString() == "ANYONE" ?

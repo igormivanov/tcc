@@ -36,7 +36,7 @@ export function Ride(){
                 end: [3,0]
               }
             }} 
-            borderRadius={8} p={3}
+            borderRadius={8} p={3} key={ride.id}
             >
               <Text fontSize="lg">{ride.origin} {<FontAwesome name="arrow-right"/>} {ride.destination}</Text>
               <Text><FontAwesome name="car"/> {ride.user.name} / Limite de vagas: {ride.passenger_limit}</Text>

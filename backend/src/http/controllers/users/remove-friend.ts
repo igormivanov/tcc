@@ -6,11 +6,11 @@ import { RemoveFriendService } from "../../../services/users/remove-friend";
 
 export async function removeFriend(request: FastifyRequest, reply: FastifyReply) {
 
-  const removeFriendBodySchema = z.object({
+  const removeFriendParamSchema = z.object({
     followingId: z.string(),
   })
 
-  const { followingId } = removeFriendBodySchema.parse(request.body);
+  const { followingId } = removeFriendParamSchema.parse(request.params);
 
   try {
     const prismaUsersRepository = new PrismaUsersRepository()

@@ -1,7 +1,7 @@
 import { Group } from "@components/Group";
 import { HomeHeader } from "@components/HomeHeader";
 import { Box, Center, FlatList, HStack, Image, Text, VStack } from "native-base";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { format, formatDate } from 'date-fns/format';
 import {ptBR} from 'date-fns/locale';
@@ -12,6 +12,7 @@ import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigatorRoutesProps, HomeRoutesTypes } from "src/routes/home.routes";
 import { useAuth } from "@hooks/useAuth";
+import { useCity } from "@hooks/useCity";
 // import { Image } from "react-native-svg";
 
 export function Home(){
@@ -21,8 +22,15 @@ export function Home(){
 	const dayOfWeek = format(currentDate, 'EEEE', { locale: ptBR });
 
 	const { user } = useAuth()
+	const {setCitySearch, citySearch} = useCity()
 
 	const navigation = useNavigation<HomeNavigatorRoutesProps>()
+
+	useEffect(() => {
+		if (citySearch.destination && citySearch.origin) {
+			setCitySearch({destination: '', origin: ''})
+		}
+	},[])
 	
 
 	const capitalizeFirstLetter = (string: string) => {

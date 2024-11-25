@@ -28,6 +28,7 @@ export function CitySearch({route}){
     getCitiesHandler()
   }, [])
 
+
   const { type } = route.params
 
   function removeAccentsAndLowerCase(str: string): string {

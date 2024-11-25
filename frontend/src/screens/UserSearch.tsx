@@ -10,25 +10,16 @@ import { UserSearchNavigatorRoutesProps } from "src/routes/userSearch.routes";
 import { useAuth } from "@hooks/useAuth";
 import { api } from "src/service/api";
 import { FriendDTO } from "@dtos/FriendDTO";
+import { useFollower } from "@hooks/useFollower";
 
 export function UserSearch() {
 
   const navigation = useNavigation<UserSearchNavigatorRoutesProps>()
-  const {token} = useAuth()
-  const [userFriends, setUserFriends] = useState<FriendDTO[]>([])
   const [searchText, setSearchText] = useState('');
+  const {getUserFollowers, userFollowers} = useFollower()
 
   useEffect(() => {
-    const handleGetUserFriends = async () => {
-      const {data} = await api.get('/users/list-friends', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      setUserFriends(data.friends)
-      console.log(data.friends)
-    }
-    handleGetUserFriends()
+    getUserFollowers() 
   }, [])
 
   
@@ -39,7 +30,7 @@ export function UserSearch() {
     //   return [];
     // }
 
-    return userFriends.filter((user) => 
+    return userFollowers.filter((user) => 
       user.name.toLowerCase().startsWith(searchText.toLowerCase())
     )
   }

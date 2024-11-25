@@ -48,7 +48,7 @@ export function SignIn() {
 		}
 		
 		console.log(email, password)
-		// signIn(email, password)
+		signIn(email, password)
 	}
 
 

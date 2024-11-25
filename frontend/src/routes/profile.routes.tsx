@@ -36,7 +36,7 @@ const { Screen, Navigator} = createNativeStackNavigator<ProfileRoutes>()
 
 export function ProfileRoutes(){
   return (
-    <Navigator screenOptions={{ headerShown: false }} initialRouteName="profileScreen">
+    <Navigator screenOptions={{ headerShown: false }} >
       <Screen name="profileScreen" component={Profile}/>
       <Screen name="settings" component={Settings}/>
       <Screen name="preferences" component={ProfilePreferences}/>

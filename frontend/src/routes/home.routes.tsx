@@ -7,6 +7,7 @@ import { FiltroInteresseRepublica } from "@screens/FiltroInteresseRepublica";
 import { InteresseRepublica } from "@screens/InteresseRepublica";
 import { CitySearch } from "@screens/CitySearch";
 import { UserSearch } from "@screens/UserSearch";
+import { UserSearchProfile } from "@screens/UserSearchProfile";
 
 export type HomeRoutesTypes = {
   homeScreen: undefined
@@ -18,7 +19,10 @@ export type HomeRoutesTypes = {
   citySearch: {
     type: string
   }
-  userSearchScreen: undefined
+  userSearchScreen: undefined,
+  UserSearchProfile: {
+    userId: string
+  }
 }
 
 export type HomeNavigatorRoutesProps = NativeStackNavigationProp<HomeRoutesTypes>
@@ -36,6 +40,7 @@ export function HomeRoutes(){
       <Screen name="interesseRepublica" component={InteresseRepublica}/>
       <Screen name="citySearch" component={CitySearch}/>
       <Screen name="userSearchScreen" component={UserSearch}/>
+      <Screen name="UserSearchProfile" component={UserSearchProfile} />
     </Navigator>
   )
 }

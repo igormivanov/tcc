@@ -41,6 +41,7 @@ import { Loading } from '@components/Loading'
 import { userNameFormatter } from '@utils/UserNameFormatter'
 import { ProfileNavigatorRoutesProps } from 'src/routes/profile.routes'
 import { UserDTO } from '@dtos/UserDTO'
+import { useFollower } from '@hooks/useFollower'
 
 const PHOTO_SIZE = 98
 
@@ -63,6 +64,7 @@ export function UserSearchProfile({route}) {
 
 	const [loading, setLoading] = useState(false)
   const [userFounded, setUserFounded] = useState<UserDTO>()
+	const {userFollowers, Follow, removeFollower} = useFollower()
 
 	useEffect(() => {
 		const userProfileHandler = async () => {
@@ -98,6 +100,21 @@ export function UserSearchProfile({route}) {
 	// console.log(user.id)
 	const userNameFormatted = userNameFormatter(userFounded?.name)
 
+	const IsFollower = ()  => {
+		return userFollowers.some(follower => follower.id == userFounded?.id)
+	}
+
+	const handleFollower = async (isFollower: boolean) => {
+		console.log("handle")
+		if (isFollower) {
+			console.log("entrei")
+			await removeFollower(userFounded!.id)
+			return
+		}
+		console.log("vou dar follow")
+		await Follow(userFounded!.id)
+	}
+
 	return (
 		<SafeAreaView >
 			{/* <ScreenHeader title="" /> */}
@@ -105,8 +122,8 @@ export function UserSearchProfile({route}) {
         <Button variant="unstyled" onPress={() => navigation.goBack()}>
           <FontAwesome name="chevron-left" size={18}/>
         </Button>
-        <Button  variant="unstyled" mr={3}>
-          <FontAwesome name="star-o"  style={{color: "gray.100"}} size={18}/>
+        <Button onPress={() => handleFollower(IsFollower())} variant="unstyled" mr={3}>
+          <FontAwesome name={IsFollower() ? "star" : "star-o"}  style={{color: "gray.100"}} size={18}/>
         </Button>
       </HStack>
       {/* <Divider/> */}

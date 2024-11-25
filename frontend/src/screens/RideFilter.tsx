@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { Box, Button, Center, CheckIcon, Divider, Heading, HStack, Select, Text, VStack } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HomeNavigatorRoutesProps } from "src/routes/home.routes";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -12,8 +12,14 @@ export function RideFilter(){
 
   const navigation = useNavigation<HomeNavigatorRoutesProps>()
 
-  const {citySearch} = useCity()
+  const {citySearch, setCitySearch} = useCity()
   const {getRides} = useRide()
+
+  useEffect(() => {
+		if (citySearch.destination && citySearch.origin) {
+			setCitySearch({destination: '', origin: ''})
+		}
+	},[])
 
   async function handleSearchRideFiltered(){
     if (citySearch.origin && citySearch.destination) {

@@ -59,6 +59,7 @@ export function AuthContextProvider({children}: AuthContextProviderProps){
   async function signIn(email: string, password: string) {
     try {
       const response = await api.post('/sessions', {email, password})
+      console.log(response.data)
       if(response.data.token && response.data.userName) {
         setUser({...user, name: response.data.userName})
         setToken(response.data.token)
@@ -71,6 +72,10 @@ export function AuthContextProvider({children}: AuthContextProviderProps){
 
   async function findUserById(userId?: string) {
     try {
+      if(!token) {
+        return
+      }
+
       const { data } = await api.get(userId ? `/user/${userId}` : '/user', {
         headers: {
           Authorization: `Bearer ${token}`

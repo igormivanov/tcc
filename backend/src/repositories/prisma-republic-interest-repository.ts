@@ -24,7 +24,7 @@ export class PrismaRepublicInterestRepository implements RepublicInterestReposit
     
     return republicInterest
   }
-  async findAll(resident_limit: number, preferences: TYPES): Promise<RepublicInterest[]> {
+  async findAll(resident_limit: number, preferences: TYPES): Promise<any> {
     const republicInterests = await prisma.republicInterest.findMany({
       include: {
         user: {
@@ -39,7 +39,12 @@ export class PrismaRepublicInterestRepository implements RepublicInterestReposit
         preferences
       }
     })
-    return republicInterests
+
+    const republicInterestDTO = republicInterests.map(rep => {
+      const {user_id, ...repWithoutDuplicate} = rep
+      return repWithoutDuplicate;
+    })
+    return republicInterestDTO
   }
   async findById(republicInterestId: string): Promise<RepublicInterest | null> {
     const republicInterest = await prisma.republicInterest.findUnique({
